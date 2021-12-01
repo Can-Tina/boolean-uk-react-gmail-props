@@ -21,22 +21,22 @@ function App() {
   const starredEmails = emails.filter(email => email.starred)
 
 const toggleStar = targetEmail => {
-      const updatedEmails = emails =>
-        emails.map(email =>
-          email.id === targetEmail.id
-            ? { ...email, starred: !email.starred }
-            : email
-        )
-      setEmails(updatedEmails)
-    }
+  const updatedEmails = emails =>
+    emails.map(email =>
+      email.id === targetEmail.id
+        ? { ...email, starred: !email.starred }
+        : email
+    )
+  setEmails(updatedEmails)
+}
   
-    const toggleRead = targetEmail => {
-      const updatedEmails = emails =>
-        emails.map(email =>
-          email.id === targetEmail.id ? { ...email, read: !email.read } : email
-        )
-      setEmails(updatedEmails)
-        }
+const toggleRead = targetEmail => {
+  const updatedEmails = emails =>
+    emails.map(email =>
+      email.id === targetEmail.id ? { ...email, read: !email.read } : email
+    )
+  setEmails(updatedEmails)
+    }
 
   let filteredEmails = emails
 
@@ -45,14 +45,28 @@ const toggleStar = targetEmail => {
   if (currentTab === 'starred')
     filteredEmails = getStarredEmails(filteredEmails)
 
-  const search = value => {
+  /*const search = value => {
     event.preventDefault()
     if (value !== "") {
-      console.log(value)
-      const searchedEmails = emails.filter(email => email.starred)
+      getSearchedEmails(value)
     }
   }
 
+  const getSearchedEmails = value => {
+    const updatedEmails = emails =>
+      emails.filter(email => email.sender.toLowerCase() == value.toLowerCase())
+    setEmails(updatedEmails)
+  }*/
+
+  const searchEmails = e => {
+    e.preventDefault();
+    const updatedEmails = emails =>
+        emails.filter(email =>
+          email.sender.toLowerCase().includes(searchBar.value.toLowerCase())
+        )
+    if (!searchBar.value) return setEmails(initialEmails);
+    setEmails(updatedEmails)
+    }
 
   return (
     <div className="app">
@@ -68,7 +82,7 @@ const toggleStar = targetEmail => {
           />
         </div>
 
-        <form className="search" onSubmit={e => search(searchBar.value)}>
+        <form className="search" onSubmit={e => searchEmails(e)}>
           <input className="search-bar" placeholder="Search mail" id="searchBar"/>
         </form>
       </header>
